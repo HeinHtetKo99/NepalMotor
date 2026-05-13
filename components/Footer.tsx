@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
+import Script from "next/script";
 import ScrollToTop from "./ScrollToTop";
 import { usePathname } from "next/navigation";
-import toast from "react-hot-toast";
 
 type SocialMediaProps = {
   label: string;
@@ -23,43 +23,8 @@ const socialMediaIcons: SocialMediaProps[] = [
 
 const Footer: React.FC = () => {
   const pathname = usePathname();
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   if (pathname.startsWith('/admin')) return null;
 
-  const onSubmitNewsletter = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const normalizedEmail = email.trim();
-
-    if (!normalizedEmail) {
-      toast.error("Please enter your email address.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const response = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: normalizedEmail }),
-      });
-
-      const responseData = await response.json().catch(() => null);
-
-      if (!response.ok || !responseData?.success) {
-        toast.error(responseData?.message || "Failed to subscribe");
-        return;
-      }
-
-      toast.success(responseData.message || "Thanks for signing up!");
-      setEmail("");
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Something went wrong";
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
   return (
     <footer className="w-full border-t border-line bg-surface text-foreground">
     <div className="w-full relative max-w-screen-2xl mx-auto px-4 md:px-6 lg:px-8 py-12">
@@ -75,30 +40,16 @@ const Footer: React.FC = () => {
           {/* scroll up button */}
           <ScrollToTop />
         </div>
-        <div>
-          <label htmlFor="email" className="text-md pb-2 block text-muted">
-            Email Address
-          </label>
-          <form
-            onSubmit={onSubmitNewsletter}
-            className=" w-full rounded-md border border-line md:w-[40%]  overflow-hidden flex items-center bg-background-soft"
-          >
-            <input
-              id="email"
-              type="email"
-              className="border-none py-2 px-2 flex-1 bg-transparent text-foreground placeholder:text-muted focus:outline-none "
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-            />
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="lux-button px-4 py-3 text-sm cursor-pointer font-bold uppercase tracking-wider disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              Subscribe
-            </button>
-          </form>
+        <div className="w-full md:w-[40%]">
+          <Script
+            id="ghost-newsletter-signup"
+            src="https://cdn.jsdelivr.net/ghost/signup-form@~0.3/umd/signup-form.min.js"
+            strategy="lazyOnload"
+            data-button-color="#064706"
+            data-button-text-color="#FFFFFF"
+            data-site="https://biratinfo.com/"
+            data-locale="en"
+          />
         </div>
       </div>
       <div className="h-[1px] my-6 bg-line"></div>
