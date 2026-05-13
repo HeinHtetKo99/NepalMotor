@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import Script from "next/script";
+import React, { useEffect, useRef } from "react";
 import ScrollToTop from "./ScrollToTop";
 import { usePathname } from "next/navigation";
 
@@ -21,8 +20,29 @@ const socialMediaIcons: SocialMediaProps[] = [
   { label: "material-symbol", src: "/footerImage/material-symbol.png" },
 ];
 
+const GHOST_SIGNUP_SRC =
+  "https://cdn.jsdelivr.net/npm/@tryghost/signup-form@0.3/umd/signup-form.min.js";
+
 const Footer: React.FC = () => {
   const pathname = usePathname();
+  const ghostMountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (pathname.startsWith("/admin")) return;
+    const mount = ghostMountRef.current;
+    if (!mount) return;
+    if (mount.querySelector(`script[src="${GHOST_SIGNUP_SRC}"]`)) return;
+
+    const script = document.createElement("script");
+    script.src = GHOST_SIGNUP_SRC;
+    script.async = false;
+    script.dataset.buttonColor = "#064706";
+    script.dataset.buttonTextColor = "#FFFFFF";
+    script.dataset.site = "https://biratinfo.com/";
+    script.dataset.locale = "en";
+    mount.appendChild(script);
+  }, [pathname]);
+
   if (pathname.startsWith('/admin')) return null;
 
   return (
@@ -40,17 +60,7 @@ const Footer: React.FC = () => {
           {/* scroll up button */}
           <ScrollToTop />
         </div>
-        <div className="w-full md:w-[40%]">
-          <Script
-            id="ghost-newsletter-signup"
-            src="https://cdn.jsdelivr.net/ghost/signup-form@~0.3/umd/signup-form.min.js"
-            strategy="lazyOnload"
-            data-button-color="#064706"
-            data-button-text-color="#FFFFFF"
-            data-site="https://biratinfo.com/"
-            data-locale="en"
-          />
-        </div>
+        <div ref={ghostMountRef} className="w-full md:w-[40%]" />
       </div>
       <div className="h-[1px] my-6 bg-line"></div>
       {/* header lower part */}

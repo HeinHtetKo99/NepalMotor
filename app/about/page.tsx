@@ -291,7 +291,7 @@ export default function AboutPage() {
       </section>
 
       {/* 3. Team Section (Our People) */}
-      <section className="bg-surface-2 py-16 sm:py-24" id="team">
+      {/* <section className="bg-surface-2 py-16 sm:py-24" id="team">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
@@ -326,7 +326,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* 4. Ecosystem Section */}
       <section className="py-16 sm:py-24 bg-surface-2">
