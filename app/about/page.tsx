@@ -329,8 +329,8 @@ export default function AboutPage() {
       </section> */}
 
       {/* 4. Ecosystem Section */}
-      <section className="py-16 sm:py-24 bg-surface-2">
-        <div className="container mx-auto max-w-5xl px-4">
+      <section className="bg-surface-2">
+        <div className="container mx-auto max-w-5xl px-4 py-10">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Our Ecosystem

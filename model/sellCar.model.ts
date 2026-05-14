@@ -1,4 +1,5 @@
 import mongoose, { models } from 'mongoose';
+import './user.model';
 
 const sellCarSchema = new mongoose.Schema({
     user:{
